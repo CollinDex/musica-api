@@ -18,8 +18,8 @@ export class CreateSongDTO {
     @IsMilitaryTime()
     readonly duration: Date;
 
-    @IsString()
     @IsOptional()
+    @IsString()
     readonly lyrics: string;
 
     @IsOptional()

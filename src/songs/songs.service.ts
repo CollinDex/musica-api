@@ -13,7 +13,6 @@ export class SongsService {
     ) {}
 
     async create(songDto: CreateSongDTO): Promise<Song> {
-
         try {
             // Add a song to the database
             const song = new Song;
