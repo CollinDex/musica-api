@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { SongsController } from './songs.controller';
 import { SongsService } from './songs.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Song } from 'src/typeorm/entities/songs/songs.entity';
+import { Song } from 'src/songs/entities/songs.entity';
 
 
 @Module({

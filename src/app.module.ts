@@ -1,4 +1,4 @@
-import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { SongsModule } from './songs/songs.module';
@@ -6,13 +6,13 @@ import { LoggerMiddleware } from './common/middleware/logger/logger.middleware';
 import { SongsController } from './songs/songs.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
-import { Song } from './typeorm/entities/songs/songs.entity';
+import { Song } from './songs/entities/songs.entity';
 
 @Module({
   imports: [
     SongsModule,
     TypeOrmModule.forRoot({
-      type: "postgres",
+      type: 'postgres',
       host: process.env.PG_HOST,
       url: process.env.PG_URL,
       username: process.env.PG_USER,
@@ -21,10 +21,11 @@ import { Song } from './typeorm/entities/songs/songs.entity';
       database: process.env.PG_DB,
       entities: [Song],
       synchronize: process.env.NODE_ENV === 'production' ? false : true,
-      ssl: {
-        rejectUnauthorized: true,
-      },
-    })
+      ssl:
+        process.env.NODE_ENV === 'production'
+          ? { rejectUnauthorized: true }
+          : false,
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],
