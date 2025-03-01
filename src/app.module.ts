@@ -1,12 +1,12 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { SongsModule } from './songs/songs.module';
+import { SongsModule } from './modules/songs/songs.module';
 import { LoggerMiddleware } from './common/middleware/logger/logger.middleware';
-import { SongsController } from './songs/songs.controller';
+import { SongsController } from './modules/songs/songs.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
-import { Song } from './songs/entities/songs.entity';
+import { Song } from './modules/songs/entities/songs.entity';
 
 @Module({
   imports: [

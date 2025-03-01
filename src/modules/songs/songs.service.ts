@@ -6,7 +6,7 @@ import {
   Pagination,
   IPaginationOptions,
 } from 'nestjs-typeorm-paginate';
-import { Song } from 'src/songs/entities/songs.entity';
+import { Song } from './entities/songs.entity';
 import { CreateSongDTO } from './dto/create-song-dto';
 import { UpdateSongDto } from './dto/update-song-dto';
 
