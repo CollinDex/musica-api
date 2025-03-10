@@ -36,7 +36,6 @@ export class SongsService {
 
   async findAll(): Promise<Song[]> {
     try {
-      //Return all the stored songs
       return await this.songRepository.find();
     } catch (error) {
       throw new Error('Error in Db while fetching content');
@@ -66,7 +65,7 @@ export class SongsService {
     try {
       return this.songRepository.update(id, recordToUpdate);
     } catch (error) {
-      throw new Error('Error Deleting Content');
+      throw new Error('Error Updating Content');
     }
   }
 
