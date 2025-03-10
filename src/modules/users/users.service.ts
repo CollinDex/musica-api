@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, UpdateResult } from 'typeorm';
 import {
@@ -25,9 +25,20 @@ export class UsersService {
       user.email = userDto.email;
       user.password = userDto.password;
 
+      const existingUser = await this.userRepository.findOne({
+        where: { email: user.email },
+      });
+
+      if (existingUser) {
+        throw new HttpException('Email already exists', HttpStatus.CONFLICT);
+      }
+
       return await this.userRepository.save(user);
     } catch (error) {
-      throw new Error('Error in Db while adding content');
+      throw new HttpException(
+        'Error in DB while adding content',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 
@@ -35,7 +46,10 @@ export class UsersService {
     try {
       return await this.userRepository.find();
     } catch (error) {
-      throw new Error('Error in Db while fetching content');
+      throw new HttpException(
+        'Error in DB while adding content',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 
@@ -43,7 +57,10 @@ export class UsersService {
     try {
       return await this.userRepository.findOneBy({ id });
     } catch (error) {
-      throw new Error('Error in Db while fetching content');
+      throw new HttpException(
+        'Error in DB while adding content',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 
@@ -51,7 +68,10 @@ export class UsersService {
     try {
       await this.userRepository.delete(id);
     } catch (error) {
-      throw new Error('Error Deleting Content');
+      throw new HttpException(
+        'Error in DB while adding content',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 
@@ -62,7 +82,10 @@ export class UsersService {
     try {
       return this.userRepository.update(id, recordToUpdate);
     } catch (error) {
-      throw new Error('Error Updating Content');
+      throw new HttpException(
+        'Error in DB while adding content',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 

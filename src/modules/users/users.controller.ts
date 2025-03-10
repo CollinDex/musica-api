@@ -3,7 +3,6 @@ import {
   Controller,
   Delete,
   Get,
-  HttpException,
   HttpStatus,
   Param,
   ParseIntPipe,
@@ -31,23 +30,13 @@ export class UsersController {
     @Query('limit', new DefaultValuePipe(10), ParseIntPipe)
     limit: number = 10,
   ): Promise<Pagination<User>> {
-    try {
-      //Pagination
-      limit = limit > 100 ? 100 : limit;
-      return this.usersService.paginate({
-        page,
-        limit,
-      });
-      //return this.usersService.findAll();
-    } catch (error) {
-      throw new HttpException(
-        'server error',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-        {
-          cause: error,
-        },
-      );
-    }
+    //Pagination
+    limit = limit > 100 ? 100 : limit;
+    return this.usersService.paginate({
+      page,
+      limit,
+    });
+    //return this.usersService.findAll();
   }
 
   @Get(':id')
@@ -60,33 +49,13 @@ export class UsersController {
     )
     id: number,
   ): Promise<User> {
-    try {
-      return this.usersService.findById(id);
-    } catch (error) {
-      throw new HttpException(
-        'Server Error',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-        {
-          cause: error,
-        },
-      );
-    }
+    return this.usersService.findById(id);
   }
 
   @Post()
   createSong(@Body() createUserDTO: CreateUserDTO): Promise<User> {
-    try {
-      const results = this.usersService.create(createUserDTO);
-      return results;
-    } catch (error) {
-      throw new HttpException(
-        'Server Error',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-        {
-          cause: error,
-        },
-      );
-    }
+    const results = this.usersService.create(createUserDTO);
+    return results;
   }
 
   @Put(':id')
@@ -96,17 +65,7 @@ export class UsersController {
     @Body()
     updateUserDto: UpdateUserDTO,
   ): Promise<UpdateResult> {
-    try {
-      return this.usersService.update(id, updateUserDto);
-    } catch (error) {
-      throw new HttpException(
-        'Server Error',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-        {
-          cause: error,
-        },
-      );
-    }
+    return this.usersService.update(id, updateUserDto);
   }
 
   @Delete(':id')
@@ -114,17 +73,7 @@ export class UsersController {
     @Param('id', ParseIntPipe)
     id: number,
   ) {
-    try {
-      const results = this.usersService.delete(id);
-      return results;
-    } catch (error) {
-      throw new HttpException(
-        'Server Error',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-        {
-          cause: error,
-        },
-      );
-    }
+    const results = this.usersService.delete(id);
+    return results;
   }
 }
