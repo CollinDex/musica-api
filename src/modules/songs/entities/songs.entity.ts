@@ -1,4 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Artist } from 'src/modules/artists/entities/artists.entities';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity('songs')
 export class Song {
@@ -8,8 +15,11 @@ export class Song {
   @Column()
   title: string;
 
-  @Column('varchar', { array: true })
-  artists: string[];
+  @ManyToMany(() => Artist, (artist) => artist.songs, {
+    cascade: ['insert', 'update'],
+  })
+  @JoinTable({ name: 'songs_artists' })
+  artists: Artist[];
 
   @Column({ type: 'date' })
   releasedDate: Date;

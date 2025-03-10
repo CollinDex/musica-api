@@ -6,10 +6,14 @@ import { LoggerMiddleware } from './common/middleware/logger/logger.middleware';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { Song } from './modules/songs/entities/songs.entity';
+import { User } from './modules/users/entities/users.entitiy';
+import { Artist } from './modules/artists/entities/artists.entities';
+import { UsersModule } from './modules/users/users.module';
 
 @Module({
   imports: [
     SongsModule,
+    UsersModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.PG_HOST,
@@ -18,7 +22,7 @@ import { Song } from './modules/songs/entities/songs.entity';
       password: process.env.PG_PASSWORD,
       port: +process.env.PG_PORT,
       database: process.env.PG_DB,
-      entities: [Song],
+      entities: [Song, User, Artist],
       synchronize: process.env.NODE_ENV === 'production' ? false : true,
       ssl:
         process.env.NODE_ENV === 'production'
