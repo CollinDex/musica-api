@@ -53,13 +53,13 @@ export class UsersController {
   }
 
   @Post()
-  createSong(@Body() createUserDTO: CreateUserDTO): Promise<User> {
+  createUser(@Body() createUserDTO: CreateUserDTO): Promise<User> {
     const results = this.usersService.create(createUserDTO);
     return results;
   }
 
   @Put(':id')
-  updateSong(
+  updateUser(
     @Param('id', ParseIntPipe)
     id: number,
     @Body()

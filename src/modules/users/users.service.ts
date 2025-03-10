@@ -35,6 +35,12 @@ export class UsersService {
 
       return await this.userRepository.save(user);
     } catch (error) {
+      // Preserve known HTTP exceptions
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      // Log unexpected errors and throw a generic error
+      console.error('Unexpected error in create method:', error);
       throw new HttpException(
         'Error in DB while adding content',
         HttpStatus.INTERNAL_SERVER_ERROR,
