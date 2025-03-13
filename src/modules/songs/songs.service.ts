@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository, UpdateResult } from 'typeorm';
 import {
@@ -71,9 +71,21 @@ export class SongsService {
     recordToUpdate: UpdateSongDto,
   ): Promise<UpdateResult> {
     try {
+      const existingSong = await this.songRepository.findOne({
+        where: { id: id },
+      });
+
+      if (!existingSong) {
+        throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+      }
+
+      if (Object.values(recordToUpdate).length === 0) {
+        throw new HttpException('No supplied data', HttpStatus.BAD_REQUEST);
+      }
+
       return this.songRepository.update(id, recordToUpdate);
     } catch (error) {
-      throw new Error('Error Updating Content');
+      throw error;
     }
   }
 

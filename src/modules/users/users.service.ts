@@ -25,6 +25,8 @@ export class UsersService {
       user.email = userDto.email;
       user.password = userDto.password;
 
+      console.log('userDto:', userDto);
+
       const existingUser = await this.userRepository.findOne({
         where: { email: user.email },
       });
@@ -86,12 +88,21 @@ export class UsersService {
     recordToUpdate: UpdateUserDTO,
   ): Promise<UpdateResult> {
     try {
-      return this.userRepository.update(id, recordToUpdate);
+      const existingUser = await this.userRepository.findOne({
+        where: { id: id },
+      });
+
+      if (!existingUser) {
+        throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+      }
+
+      if (Object.values(recordToUpdate).length === 0) {
+        throw new HttpException('No supplied data', HttpStatus.BAD_REQUEST);
+      }
+
+      return await this.userRepository.update(id, recordToUpdate);
     } catch (error) {
-      throw new HttpException(
-        'Error in DB while adding content',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      throw error;
     }
   }
 
