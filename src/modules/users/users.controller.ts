@@ -69,7 +69,7 @@ export class UsersController {
   }
 
   @Delete(':id')
-  deleteSong(
+  deleteUser(
     @Param('id', ParseIntPipe)
     id: number,
   ) {
