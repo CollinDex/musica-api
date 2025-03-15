@@ -9,11 +9,13 @@ import { Song } from './modules/songs/entities/songs.entity';
 import { User } from './modules/users/entities/users.entitiy';
 import { Artist } from './modules/artists/entities/artists.entities';
 import { UsersModule } from './modules/users/users.module';
+import { ArtistsModule } from './modules/artists/aritsts.module';
 
 @Module({
   imports: [
     SongsModule,
     UsersModule,
+    ArtistsModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.PG_HOST,
