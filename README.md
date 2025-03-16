@@ -1,73 +1,143 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Musica API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Musica API is the backend service for the Musica application, a music management system that enables users to manage songs, artists, and playlists. Built using **NestJS** and **TypeORM**, it provides RESTful endpoints for handling music data efficiently.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Table of Contents
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Installation](#installation)
+- [Environment Variables](#environment-variables)
+- [API Endpoints](#api-endpoints)
+- [Database Schema](#database-schema)
+- [Error Handling](#error-handling)
+- [License](#license)
 
-## Description
+## Features
+- **User Authentication** (JWT-based login & registration)
+- **CRUD operations for Songs, Artists, and Playlists**
+- **Many-to-Many Relationship between Songs and Artists**
+- **Pagination support for large datasets**
+- **Error handling & validation using Class Validator**
+- **Built-in database migrations**
+- **Optimized queries with TypeORM Query Builder**
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Tech Stack
+- **NestJS** (Backend Framework)
+- **TypeORM** (ORM for database management)
+- **PostgreSQL / MySQL** (Relational database support)
+- **JWT Authentication** (Secure API access)
+- **Docker** (For containerized deployment)
+- **Swagger** (API Documentation)
 
 ## Installation
 
-```bash
-$ npm install
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-username/musica-api.git
+   cd musica-api
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Set up the environment variables (See [Environment Variables](#environment-variables))
+
+4. Run database migrations:
+   ```bash
+   npm run migration:run
+   ```
+
+5. Start the server:
+   ```bash
+   npm run start:dev
+   ```
+
+## Environment Variables
+Create a `.env` file in the project root and configure the following:
+```env
+DATABASE_HOST=localhost
+DATABASE_PORT=5432
+DATABASE_USER=your-db-user
+DATABASE_PASSWORD=your-db-password
+DATABASE_NAME=musica_db
+JWT_SECRET=your-secret-key
+PORT=3000
 ```
 
-## Running the app
+## API Endpoints
+### **Authentication**
+| Method | Endpoint            | Description               |
+|--------|--------------------|---------------------------|
+| POST   | /auth/register     | Register a new user       |
+| POST   | /auth/login        | Authenticate user & get token |
 
-```bash
-# development
-$ npm run start
+### **Songs**
+| Method | Endpoint       | Description |
+|--------|---------------|-------------|
+| GET    | /songs        | Fetch all songs |
+| GET    | /songs/:id    | Fetch a single song |
+| POST   | /songs        | Create a new song |
+| PATCH  | /songs/:id    | Update a song |
+| DELETE | /songs/:id    | Delete a song |
 
-# watch mode
-$ npm run start:dev
+### **Artists**
+| Method | Endpoint       | Description |
+|--------|---------------|-------------|
+| GET    | /artists      | Fetch all artists |
+| GET    | /artists/:id  | Fetch a single artist |
+| POST   | /artists      | Add a new artist |
+| PATCH  | /artists/:id  | Update an artist |
+| DELETE | /artists/:id  | Remove an artist |
 
-# production mode
-$ npm run start:prod
+## Database Schema
+### **User Entity**
+```typescript
+@Entity('users')
+export class User {
+  @PrimaryGeneratedColumn() id: number;
+  @Column() firstName: string;
+  @Column() lastName: string;
+  @Column({ unique: true }) email: string;
+  @Column() password: string;
+}
 ```
 
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+### **Song Entity**
+```typescript
+@Entity('songs')
+export class Song {
+  @PrimaryGeneratedColumn() id: number;
+  @Column() title: string;
+  @ManyToMany(() => Artist, (artist) => artist.songs, { cascade: true })
+  @JoinTable({ name: 'songs_artists' })
+  artists: Artist[];
+  @Column({ type: 'date' }) releasedDate: Date;
+}
 ```
 
-## Support
+### **Artist Entity**
+```typescript
+@Entity('artists')
+export class Artist {
+  @PrimaryGeneratedColumn() id: number;
+  @Column() name: string;
+  @ManyToMany(() => Song, (song) => song.artists)
+  songs: Song[];
+}
+```
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+## Error Handling
+Musica API uses NestJS's built-in `HttpException` for structured error responses. Example error response:
+```json
+{
+  "statusCode": 400,
+  "message": "Validation failed: title is required",
+  "error": "Bad Request"
+}
+```
 
 ## License
+This project is licensed under the MIT License. Feel free to modify and use it as needed.
 
-Nest is [MIT licensed](LICENSE).
