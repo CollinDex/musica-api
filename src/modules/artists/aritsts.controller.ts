@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common';
 import { ArtistsService } from './aritsts.service';
 import { CreateArtistDTO } from './dto/create-artist-dto';
-import { Artist } from './entities/artists.entities';
+import { Artist } from './entities/artists.entity';
 import { Pagination } from 'nestjs-typeorm-paginate';
 
 @Controller('artists')

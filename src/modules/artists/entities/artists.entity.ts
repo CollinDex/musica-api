@@ -1,5 +1,5 @@
 import { Song } from 'src/modules/songs/entities/songs.entity';
-import { User } from 'src/modules/users/entities/users.entitiy';
+import { User } from 'src/modules/users/entities/users.entity';
 import {
   Entity,
   JoinColumn,

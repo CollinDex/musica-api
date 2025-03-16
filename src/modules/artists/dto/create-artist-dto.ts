@@ -1,11 +1,11 @@
-import { IsArray, IsNotEmpty, IsNumber } from 'class-validator';
+import { IsArray, IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
 
 export class CreateArtistDTO {
   @IsNotEmpty()
   @IsNumber()
   userId: number;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsArray()
   @IsNumber({}, { each: true })
   songIds: number[];

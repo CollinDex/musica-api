@@ -6,9 +6,9 @@ import {
   Pagination,
   IPaginationOptions,
 } from 'nestjs-typeorm-paginate';
-import { Artist } from './entities/artists.entities';
+import { Artist } from './entities/artists.entity';
 import { CreateArtistDTO } from './dto/create-artist-dto';
-import { User } from '../users/entities/users.entitiy';
+import { User } from '../users/entities/users.entity';
 import { Song } from '../songs/entities/songs.entity';
 
 @Injectable()
@@ -33,10 +33,10 @@ export class ArtistsService {
       }
 
       const songs = await this.songRepository.findBy({
-        id: In(artistDto.songIds),
+        id: In(artistDto.songIds || []),
       });
 
-      if (!songs.length) {
+      if (!songs.length && artistDto.songIds) {
         throw new HttpException('No valid songs found', HttpStatus.BAD_REQUEST);
       }
 
@@ -49,8 +49,11 @@ export class ArtistsService {
       console.log('artist:', artist);
 
       const existingAritst = await this.artistRepository.findOne({
-        where: { id: artist.id },
+        where: { user: artist.user },
       });
+
+      console.log('ExistingArtist', existingAritst);
+      console.log('ExistingArtistId', artist.user);
 
       if (existingAritst) {
         throw new HttpException('Artist already exists', HttpStatus.CONFLICT);

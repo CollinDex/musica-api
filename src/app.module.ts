@@ -6,10 +6,11 @@ import { LoggerMiddleware } from './common/middleware/logger/logger.middleware';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { Song } from './modules/songs/entities/songs.entity';
-import { User } from './modules/users/entities/users.entitiy';
-import { Artist } from './modules/artists/entities/artists.entities';
+import { User } from './modules/users/entities/users.entity';
+import { Artist } from './modules/artists/entities/artists.entity';
 import { UsersModule } from './modules/users/users.module';
 import { ArtistsModule } from './modules/artists/aritsts.module';
+import { Playlist } from './modules/playlists/entities/playlists.entity';
 
 @Module({
   imports: [
@@ -24,7 +25,7 @@ import { ArtistsModule } from './modules/artists/aritsts.module';
       password: process.env.PG_PASSWORD,
       port: +process.env.PG_PORT,
       database: process.env.PG_DB,
-      entities: [Song, User, Artist],
+      entities: [Song, User, Artist, Playlist],
       synchronize: process.env.NODE_ENV === 'production' ? false : true,
       ssl:
         process.env.NODE_ENV === 'production'
