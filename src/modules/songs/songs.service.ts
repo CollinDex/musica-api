@@ -9,7 +9,7 @@ import {
 import { Song } from './entities/songs.entity';
 import { CreateSongDTO } from './dto/create-song-dto';
 import { UpdateSongDto } from './dto/update-song-dto';
-import { Artist } from '../artists/entities/artists.entities';
+import { Artist } from '../artists/entities/artists.entity';
 
 @Injectable()
 export class SongsService {
@@ -44,7 +44,9 @@ export class SongsService {
 
   async findAll(): Promise<Song[]> {
     try {
-      return await this.songRepository.find();
+      return await this.songRepository.find({
+        relations: ['artists'],
+      });
     } catch (error) {
       throw new Error('Error in Db while fetching content');
     }
@@ -52,7 +54,10 @@ export class SongsService {
 
   async findById(id: number): Promise<Song> {
     try {
-      return await this.songRepository.findOneBy({ id });
+      return await this.songRepository.findOne({
+        where: { id: id },
+        relations: ['artists'],
+      });
     } catch (error) {
       throw new Error('Error in Db while fetching content');
     }
@@ -94,8 +99,20 @@ export class SongsService {
     //return paginate<Song>(this.songRepository, options);
 
     //Paginate using QueryBuilder
-    const queryBuilder = this.songRepository.createQueryBuilder('c');
-    queryBuilder.orderBy('c.releasedDate', 'DESC');
+    //const queryBuilder = this.songRepository.createQueryBuilder('c');
+    //queryBuilder.orderBy('c.releasedDate', 'DESC');
+    //return paginate<Song>(queryBuilder, options);
+
+    // Create a query builder for the songs
+    const queryBuilder = this.songRepository.createQueryBuilder('song');
+
+    // Join the artists table and select their data
+    queryBuilder.leftJoinAndSelect('song.artists', 'artist');
+
+    // Order by release date in descending order
+    queryBuilder.orderBy('song.releasedDate', 'DESC');
+
+    // Use the paginate function from nestjs-typeorm-paginate
     return paginate<Song>(queryBuilder, options);
   }
 }

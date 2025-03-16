@@ -1,9 +1,11 @@
-import { Artist } from 'src/modules/artists/entities/artists.entities';
+import { Artist } from 'src/modules/artists/entities/artists.entity';
+import { Playlist } from 'src/modules/playlists/entities/playlists.entity';
 import {
   Column,
   Entity,
   JoinTable,
   ManyToMany,
+  ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -32,4 +34,7 @@ export class Song {
 
   @Column({ type: 'text', nullable: true })
   lyrics: string;
+
+  @ManyToOne(() => Playlist, (playlist) => playlist.songs)
+  playlist: Playlist;
 }
