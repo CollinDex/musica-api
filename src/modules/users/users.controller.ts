@@ -13,7 +13,7 @@ import {
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDTO } from './dto/create-user-dto';
-import { User } from './entities/users.entitiy';
+import { User } from './entities/users.entity';
 import { UpdateResult } from 'typeorm';
 import { UpdateUserDTO } from './dto/update-user-dto';
 import { Pagination } from 'nestjs-typeorm-paginate';
