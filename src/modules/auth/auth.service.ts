@@ -1,26 +1,46 @@
-import { Injectable } from '@nestjs/common';
-import { CreateAuthDto } from './dto/create-auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { LoginDTO } from './dto/login.dto';
+import { UsersService } from '../users/users.service';
+import { User } from '../users/entities/users.entity';
+import * as bcrypt from 'bcryptjs';
 
 @Injectable()
 export class AuthService {
-  create(createAuthDto: CreateAuthDto) {
-    return 'This action adds a new auth';
-  }
+  constructor(private userService: UsersService) {}
 
-  findAll() {
-    return `This action returns all auth`;
-  }
+  async login(loginDto: LoginDTO): Promise<User> {
+    try {
+      const user = await this.userService.findOne(loginDto);
 
-  findOne(id: number) {
-    return `This action returns a #${id} auth`;
-  }
+      if (!user) {
+        throw new HttpException('User not Found', HttpStatus.NOT_FOUND);
+      }
 
-  update(id: number, updateAuthDto: UpdateAuthDto) {
-    return `This action updates a #${id} auth`;
-  }
+      const passwordMatched = await bcrypt.compare(
+        loginDto.password,
+        user.password,
+      );
 
-  remove(id: number) {
-    return `This action removes a #${id} auth`;
+      if (passwordMatched) {
+        delete user.password;
+        return user;
+      } else {
+        throw new HttpException(
+          'Password does not match',
+          HttpStatus.UNAUTHORIZED,
+        );
+      }
+    } catch (error) {
+      // Preserve known HTTP exceptions
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      // Log unexpected errors and throw a generic error
+      console.error('Unexpected error in auth service:', error);
+      throw new HttpException(
+        'Error in Auth Service',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 }
