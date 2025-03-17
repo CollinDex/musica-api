@@ -9,6 +9,7 @@ import {
 import { User } from './entities/users.entity';
 import { CreateUserDTO } from './dto/create-user-dto';
 import { UpdateUserDTO } from './dto/update-user-dto';
+import * as bcrypt from 'bcryptjs';
 
 @Injectable()
 export class UsersService {
@@ -19,6 +20,9 @@ export class UsersService {
 
   async create(userDto: CreateUserDTO): Promise<User> {
     try {
+      const salt = await bcrypt.genSalt();
+      userDto.password = await bcrypt.hash(userDto.password, salt);
+
       const user = new User();
       user.firstName = userDto.firstName;
       user.lastName = userDto.lastName;
@@ -35,7 +39,9 @@ export class UsersService {
         throw new HttpException('Email already exists', HttpStatus.CONFLICT);
       }
 
-      return await this.userRepository.save(user);
+      await this.userRepository.save(user);
+      delete user.password;
+      return user;
     } catch (error) {
       // Preserve known HTTP exceptions
       if (error instanceof HttpException) {

@@ -12,6 +12,7 @@ import { UsersModule } from './modules/users/users.module';
 import { ArtistsModule } from './modules/artists/aritsts.module';
 import { Playlist } from './modules/playlists/entities/playlists.entity';
 import { PlaylistsModule } from './modules/playlists/playlists.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { PlaylistsModule } from './modules/playlists/playlists.module';
     UsersModule,
     ArtistsModule,
     PlaylistsModule,
+    AuthModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.PG_HOST,
