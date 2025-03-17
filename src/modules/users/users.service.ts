@@ -10,6 +10,7 @@ import { User } from './entities/users.entity';
 import { CreateUserDTO } from './dto/create-user-dto';
 import { UpdateUserDTO } from './dto/update-user-dto';
 import * as bcrypt from 'bcryptjs';
+import { LoginDTO } from '../auth/dto/login.dto';
 
 @Injectable()
 export class UsersService {
@@ -73,6 +74,31 @@ export class UsersService {
     } catch (error) {
       throw new HttpException(
         'Error in DB while adding content',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  async findOne(userDto: LoginDTO): Promise<User> {
+    try {
+      const user = await this.userRepository.findOne({
+        where: { email: userDto.email },
+      });
+
+      if (!user) {
+        throw new HttpException('User not Found', HttpStatus.NOT_FOUND);
+      }
+
+      return user;
+    } catch (error) {
+      // Preserve known HTTP exceptions
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      // Log unexpected errors and throw a generic error
+      console.error('Unexpected error in auth service:', error);
+      throw new HttpException(
+        'Error in Users Service',
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
