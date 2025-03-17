@@ -6,13 +6,11 @@ import {
   HttpStatus,
   Param,
   ParseIntPipe,
-  Post,
   Put,
   DefaultValuePipe,
   Query,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserDTO } from './dto/create-user-dto';
 import { User } from './entities/users.entity';
 import { UpdateResult } from 'typeorm';
 import { UpdateUserDTO } from './dto/update-user-dto';
@@ -50,12 +48,6 @@ export class UsersController {
     id: number,
   ): Promise<User> {
     return this.usersService.findById(id);
-  }
-
-  @Post()
-  createUser(@Body() createUserDTO: CreateUserDTO): Promise<User> {
-    const results = this.usersService.create(createUserDTO);
-    return results;
   }
 
   @Put(':id')
