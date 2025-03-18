@@ -11,7 +11,7 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async login(loginDto: LoginDTO): Promise<{ assesToken: string }> {
+  async login(loginDto: LoginDTO): Promise<{ accessToken: string }> {
     try {
       const user = await this.userService.findOne(loginDto);
 
@@ -24,7 +24,7 @@ export class AuthService {
         delete user.password;
         const payload = { email: user.email, id: user.id };
         return {
-          assesToken: this.jwtService.sign(payload),
+          accessToken: this.jwtService.sign(payload),
         };
       } else {
         throw new HttpException(
