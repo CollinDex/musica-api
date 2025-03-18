@@ -15,7 +15,6 @@ Musica API is the backend service for the Musica application, a music management
 ## Features
 - **User Authentication** (JWT-based login & registration)
 - **CRUD operations for Songs, Artists, and Playlists**
-- **Many-to-Many Relationship between Songs and Artists**
 - **Pagination support for large datasets**
 - **Error handling & validation using Class Validator**
 - **Built-in database migrations**
@@ -24,7 +23,7 @@ Musica API is the backend service for the Musica application, a music management
 ## Tech Stack
 - **NestJS** (Backend Framework)
 - **TypeORM** (ORM for database management)
-- **PostgreSQL / MySQL** (Relational database support)
+- **PostgreSQL** (Relational database support)
 - **JWT Authentication** (Secure API access)
 - **Docker** (For containerized deployment)
 - **Swagger** (API Documentation)
@@ -62,6 +61,7 @@ DATABASE_PORT=5432
 DATABASE_USER=your-db-user
 DATABASE_PASSWORD=your-db-password
 DATABASE_NAME=musica_db
+JWT_LIMIT=1h
 JWT_SECRET=your-secret-key
 PORT=3000
 ```
