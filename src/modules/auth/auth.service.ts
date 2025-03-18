@@ -1,14 +1,17 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { LoginDTO } from './dto/login.dto';
 import { UsersService } from '../users/users.service';
-import { User } from '../users/entities/users.entity';
 import * as bcrypt from 'bcryptjs';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
-  constructor(private userService: UsersService) {}
+  constructor(
+    private userService: UsersService,
+    private jwtService: JwtService,
+  ) {}
 
-  async login(loginDto: LoginDTO): Promise<User> {
+  async login(loginDto: LoginDTO): Promise<{ assesToken: string }> {
     try {
       const user = await this.userService.findOne(loginDto);
 
@@ -19,7 +22,10 @@ export class AuthService {
 
       if (passwordMatched) {
         delete user.password;
-        return user;
+        const payload = { email: user.email, id: user.id };
+        return {
+          assesToken: this.jwtService.sign(payload),
+        };
       } else {
         throw new HttpException(
           'Password does not match',
