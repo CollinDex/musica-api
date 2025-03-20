@@ -3,11 +3,14 @@ import { LoginDTO } from './dto/login.dto';
 import { UsersService } from '../users/users.service';
 import * as bcrypt from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
+import { ArtistsService } from '../artists/aritsts.service';
+import { UserRole } from 'src/common/types/interface';
 
 @Injectable()
 export class AuthService {
   constructor(
     private userService: UsersService,
+    private artistService: ArtistsService,
     private jwtService: JwtService,
   ) {}
 
@@ -20,9 +23,23 @@ export class AuthService {
         user.password,
       );
 
-      if (passwordMatched) {
+      if (passwordMatched && user.role === UserRole.USER) {
         delete user.password;
-        const payload = { email: user.email, id: user.id, role: user.role };
+        const payload = { email: user.email, userId: user.id, role: user.role };
+        return {
+          accessToken: this.jwtService.sign(payload),
+        };
+      } else if (passwordMatched && user.role === UserRole.ARTIST) {
+        delete user.password;
+        console.log('User', user);
+        const artist = await this.artistService.findById(user.id);
+        console.log('Artist', artist);
+        const payload = {
+          email: user.email,
+          userId: user.id,
+          role: user.role,
+          artistId: artist.id,
+        };
         return {
           accessToken: this.jwtService.sign(payload),
         };
