@@ -46,15 +46,9 @@ export class PlaylistsService {
         songs,
       });
 
-      console.log('playlistDto:', playlistDto);
-      console.log('playlist:', playlist);
-
       const existingPlaylist = await this.playlistRepository.findOne({
         where: { name: playlist.name },
       });
-
-      console.log('ExistingPlaylist', existingPlaylist);
-      console.log('ExistingArtistId', playlist.name);
 
       if (existingPlaylist) {
         throw new HttpException('Playlist already exists', HttpStatus.CONFLICT);

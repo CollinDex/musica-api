@@ -31,9 +31,7 @@ export class AuthService {
         };
       } else if (passwordMatched && user.role === UserRole.ARTIST) {
         delete user.password;
-        console.log('User', user);
         const artist = await this.artistService.findById(user.id);
-        console.log('Artist', artist);
         const payload = {
           email: user.email,
           userId: user.id,

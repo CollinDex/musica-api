@@ -34,8 +34,6 @@ export class UsersService {
       user.password = userDto.password;
       user.role = userDto.role;
 
-      console.log('userDto:', userDto);
-
       const existingUser = await this.userRepository.findOne({
         where: { email: user.email },
       });
@@ -47,10 +45,9 @@ export class UsersService {
       const savedUser = await this.userRepository.save(user);
 
       if (userDto.role === UserRole.ARTIST) {
-        const artist = await this.artistService.create({
+        await this.artistService.create({
           userId: savedUser.id,
         });
-        console.log('artist created', artist);
       }
 
       delete user.password;

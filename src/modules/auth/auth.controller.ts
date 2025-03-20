@@ -4,7 +4,9 @@ import { CreateUserDTO } from '../users/dto/create-user-dto';
 import { User } from '../users/entities/users.entity';
 import { LoginDTO } from './dto/login.dto';
 import { AuthService } from './auth.service';
+import { Public } from 'src/common/decorators/metadata.decorator';
 
+@Public()
 @Controller('auth')
 export class AuthController {
   constructor(

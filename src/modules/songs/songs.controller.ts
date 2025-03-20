@@ -21,12 +21,14 @@ import { UpdateResult } from 'typeorm';
 import { UpdateSongDto } from './dto/update-song-dto';
 import { Pagination } from 'nestjs-typeorm-paginate';
 import { JwtArtistGuard } from 'src/common/guards/jwt-artist.guard';
+import { Public } from 'src/common/decorators/metadata.decorator';
 
 @Controller('songs')
 export class SongsController {
   constructor(private songsService: SongsService) {}
 
   @Get()
+  @Public()
   findAll(
     @Query('page', new DefaultValuePipe(1), ParseIntPipe)
     page: number = 1,
@@ -80,7 +82,7 @@ export class SongsController {
   @UseGuards(JwtArtistGuard)
   createSong(
     @Body() CreateSongDTO: CreateSongDTO,
-    @Request() req,
+    @Request() req: Request,
   ): Promise<Song> {
     try {
       console.log(req);

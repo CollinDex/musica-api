@@ -13,6 +13,7 @@ import { ArtistsModule } from './modules/artists/aritsts.module';
 import { Playlist } from './modules/playlists/entities/playlists.entity';
 import { PlaylistsModule } from './modules/playlists/playlists.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { JwtAuthGuard } from './common/guards/auth.guard';
 
 @Module({
   imports: [
@@ -38,11 +39,17 @@ import { AuthModule } from './modules/auth/auth.module';
     }),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    {
+      provide: 'APP_GUARD',
+      useClass: JwtAuthGuard,
+    },
+    AppService,
+  ],
 })
 export class AppModule implements NestModule {
   constructor(private dataSource: DataSource) {
-    console.log(dataSource.driver.database);
+    console.info(`Connected to ${dataSource.driver.database}`);
   }
 
   configure(consumer: MiddlewareConsumer) {

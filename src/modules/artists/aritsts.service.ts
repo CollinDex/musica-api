@@ -45,15 +45,9 @@ export class ArtistsService {
         songs,
       });
 
-      console.log('artistDto:', artistDto);
-      console.log('artist:', artist);
-
       const existingAritst = await this.artistRepository.findOne({
         where: { user: artist.user },
       });
-
-      console.log('ExistingArtist', existingAritst);
-      console.log('ExistingArtistId', artist.user);
 
       if (existingAritst) {
         throw new HttpException('Artist already exists', HttpStatus.CONFLICT);
@@ -93,11 +87,9 @@ export class ArtistsService {
 
   async findById(userId: number): Promise<Artist> {
     try {
-      console.log('userid', userId);
       const artist = await this.artistRepository.findOneBy({
         user: { id: userId },
       });
-      console.log(artist);
       return artist;
     } catch (error) {
       // Preserve known HTTP exceptions
