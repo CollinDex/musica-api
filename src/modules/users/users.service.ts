@@ -66,6 +66,25 @@ export class UsersService {
     }
   }
 
+  async enable2FA(userId: number, secret: string): Promise<UpdateResult> {
+    return this.userRepository.update(
+      { id: userId },
+      {
+        twoFASecret: secret,
+        enable2FA: true,
+      },
+    );
+  }
+
+  async disable2FA(userId: number): Promise<UpdateResult> {
+    return this.userRepository.update(
+      { id: userId },
+      {
+        enable2FA: false,
+      },
+    );
+  }
+
   async findAll(): Promise<User[]> {
     try {
       return await this.userRepository.find();
