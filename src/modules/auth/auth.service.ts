@@ -22,7 +22,7 @@ export class AuthService {
 
       if (passwordMatched) {
         delete user.password;
-        const payload = { email: user.email, id: user.id };
+        const payload = { email: user.email, id: user.id, role: user.role };
         return {
           accessToken: this.jwtService.sign(payload),
         };

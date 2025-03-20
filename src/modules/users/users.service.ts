@@ -29,6 +29,7 @@ export class UsersService {
       user.lastName = userDto.lastName;
       user.email = userDto.email;
       user.password = userDto.password;
+      user.role = userDto.role;
 
       console.log('userDto:', userDto);
 
