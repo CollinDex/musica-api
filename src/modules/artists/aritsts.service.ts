@@ -22,7 +22,7 @@ export class ArtistsService {
     private songRepository: Repository<Song>,
   ) {}
 
-  async create(artistDto: CreateArtistDTO): Promise<Artist> {
+  async create(artistDto: Partial<CreateArtistDTO>): Promise<Artist> {
     try {
       const user = await this.userRepository.findOne({
         where: { id: artistDto.userId },
@@ -91,9 +91,14 @@ export class ArtistsService {
     }
   }
 
-  async findById(id: number): Promise<Artist> {
+  async findById(userId: number): Promise<Artist> {
     try {
-      return await this.artistRepository.findOneBy({ id });
+      console.log('userid', userId);
+      const artist = await this.artistRepository.findOneBy({
+        user: { id: userId },
+      });
+      console.log(artist);
+      return artist;
     } catch (error) {
       // Preserve known HTTP exceptions
       if (error instanceof HttpException) {

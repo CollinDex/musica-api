@@ -11,12 +11,15 @@ import { CreateUserDTO } from './dto/create-user-dto';
 import { UpdateUserDTO } from './dto/update-user-dto';
 import * as bcrypt from 'bcryptjs';
 import { LoginDTO } from '../auth/dto/login.dto';
+import { UserRole } from 'src/common/types/interface';
+import { ArtistsService } from '../artists/aritsts.service';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
+    private artistService: ArtistsService,
   ) {}
 
   async create(userDto: CreateUserDTO): Promise<User> {
@@ -41,7 +44,15 @@ export class UsersService {
         throw new HttpException('Email already exists', HttpStatus.CONFLICT);
       }
 
-      await this.userRepository.save(user);
+      const savedUser = await this.userRepository.save(user);
+
+      if (userDto.role === UserRole.ARTIST) {
+        const artist = await this.artistService.create({
+          userId: savedUser.id,
+        });
+        console.log('artist created', artist);
+      }
+
       delete user.password;
       return user;
     } catch (error) {
