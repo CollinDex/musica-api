@@ -17,7 +17,13 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async login(loginDto: LoginDTO): Promise<{ accessToken: string }> {
+  async login(loginDto: LoginDTO): Promise<
+    | { accessToken: string }
+    | {
+        validate2FA: string;
+        message: string;
+      }
+  > {
     try {
       const user = await this.userService.findOne(loginDto);
 
@@ -38,6 +44,14 @@ export class AuthService {
 
       // Define a base payload
       let payload = { email: user.email, userId: user.id, role: user.role };
+
+      if (user.enable2FA && user.twoFASecret) {
+        return {
+          validate2FA: 'http://localhost:3000/auth/validate-2fa',
+          message:
+            'Please send the one-time password/token from your Authenticator app',
+        };
+      }
 
       // Role-based token modifications
       const roleHandlers = {
