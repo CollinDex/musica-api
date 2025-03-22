@@ -87,6 +87,10 @@ export class UsersService {
     );
   }
 
+  async findByApiKey(apiKey: string): Promise<User> {
+    return await this.userRepository.findOneBy({ apiKey });
+  }
+
   async findAll(): Promise<User[]> {
     try {
       return await this.userRepository.find();

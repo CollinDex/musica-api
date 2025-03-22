@@ -8,6 +8,7 @@ import { ArtistsService } from '../artists/aritsts.service';
 import { UserRole } from 'src/common/types/interface';
 import { Enable2FAType } from 'src/common/types/auth-types';
 import { UpdateResult } from 'typeorm';
+import { User } from '../users/entities/users.entity';
 
 @Injectable()
 export class AuthService {
@@ -125,5 +126,9 @@ export class AuthService {
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
+  }
+
+  async validateUserByApiKey(apiKey: string): Promise<User> {
+    return this.userService.findByApiKey(apiKey);
   }
 }

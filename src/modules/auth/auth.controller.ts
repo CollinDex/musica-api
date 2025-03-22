@@ -1,4 +1,11 @@
-import { Body, Controller, Post, Request } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Request,
+  UseGuards,
+} from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { CreateUserDTO } from '../users/dto/create-user-dto';
 import { User } from '../users/entities/users.entity';
@@ -8,6 +15,7 @@ import { Public } from 'src/common/decorators/metadata.decorator';
 import { Enable2FAType } from 'src/common/types/auth-types';
 import { UpdateResult } from 'typeorm';
 import { ValidateTokenDTO } from './dto/validate-token.dto';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('auth')
 export class AuthController {
@@ -32,6 +40,19 @@ export class AuthController {
     loginDto: LoginDTO,
   ) {
     return this.authService.login(loginDto);
+  }
+
+  @Public()
+  @Get('validateApiKey')
+  @UseGuards(AuthGuard('bearer'))
+  getProfile(
+    @Request()
+    req,
+  ) {
+    return {
+      msg: 'authenticated with apikey',
+      user: req.user,
+    };
   }
 
   @Post('enable-2fa')
