@@ -14,9 +14,12 @@ Musica API is the backend service for the Musica application, a music management
 
 ## Features
 - **User Authentication** (JWT-based login & registration)
-- **CRUD operations for Songs, Artists, and Playlists**
+- **Advanced Security with Two Factor Authentication**
+- **Role Based Access for protected endpoints**
+- **API KEY generation**
+- **CRUD operations for Users, Songs, Artists, and Playlists**
 - **Pagination support for large datasets**
-- **Error handling & validation using Class Validator**
+- **Error handling & validation**
 - **Built-in database migrations**
 - **Optimized queries with TypeORM Query Builder**
 
