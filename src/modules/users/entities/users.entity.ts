@@ -34,6 +34,9 @@ export class User {
   })
   role: UserRole;
 
+  @Column({ nullable: true })
+  apiKey: string;
+
   @OneToMany(() => Playlist, (playlist) => playlist.user)
   playlists: Playlist[];
 }

@@ -22,7 +22,7 @@ export class AuthController {
     @Body()
     userDto: CreateUserDTO,
   ): Promise<User> {
-    return this.userService.create(userDto);
+    return this.userService.signUp(userDto);
   }
 
   @Public()
