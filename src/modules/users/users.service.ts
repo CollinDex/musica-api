@@ -10,6 +10,7 @@ import { User } from './entities/users.entity';
 import { CreateUserDTO } from './dto/create-user-dto';
 import { UpdateUserDTO } from './dto/update-user-dto';
 import * as bcrypt from 'bcryptjs';
+import { v4 as uuid4 } from 'uuid';
 import { LoginDTO } from '../auth/dto/login.dto';
 import { UserRole } from 'src/common/types/interface';
 import { ArtistsService } from '../artists/aritsts.service';
@@ -22,7 +23,7 @@ export class UsersService {
     private artistService: ArtistsService,
   ) {}
 
-  async create(userDto: CreateUserDTO): Promise<User> {
+  async signUp(userDto: CreateUserDTO): Promise<User> {
     try {
       const salt = await bcrypt.genSalt();
       userDto.password = await bcrypt.hash(userDto.password, salt);
@@ -32,13 +33,14 @@ export class UsersService {
       user.lastName = userDto.lastName;
       user.email = userDto.email;
       user.password = userDto.password;
+      user.apiKey = uuid4();
       user.role = userDto.role;
 
-      const existingUser = await this.userRepository.findOne({
+      const userExists = await this.userRepository.findOne({
         where: { email: user.email },
       });
 
-      if (existingUser) {
+      if (userExists) {
         throw new HttpException('Email already exists', HttpStatus.CONFLICT);
       }
 
