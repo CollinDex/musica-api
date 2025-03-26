@@ -5,15 +5,12 @@ import { SongsModule } from './modules/songs/songs.module';
 import { LoggerMiddleware } from './common/middleware/logger/logger.middleware';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
-import { Song } from './modules/songs/entities/songs.entity';
-import { User } from './modules/users/entities/users.entity';
-import { Artist } from './modules/artists/entities/artists.entity';
 import { UsersModule } from './modules/users/users.module';
 import { ArtistsModule } from './modules/artists/aritsts.module';
-import { Playlist } from './modules/playlists/entities/playlists.entity';
 import { PlaylistsModule } from './modules/playlists/playlists.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { JwtAuthGuard } from './common/guards/auth.guard';
+import { dataSourceOptions } from './db/data-source';
 
 @Module({
   imports: [
@@ -22,21 +19,7 @@ import { JwtAuthGuard } from './common/guards/auth.guard';
     ArtistsModule,
     PlaylistsModule,
     AuthModule,
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: process.env.PG_HOST,
-      url: process.env.PG_URL,
-      username: process.env.PG_USER,
-      password: process.env.PG_PASSWORD,
-      port: +process.env.PG_PORT,
-      database: process.env.PG_DB,
-      entities: [Song, User, Artist, Playlist],
-      synchronize: process.env.NODE_ENV === 'production' ? false : true,
-      ssl:
-        process.env.NODE_ENV === 'production'
-          ? { rejectUnauthorized: true }
-          : false,
-    }),
+    TypeOrmModule.forRoot(dataSourceOptions),
   ],
   controllers: [AppController],
   providers: [
