@@ -1,7 +1,3 @@
-import { Artist } from 'src/modules/artists/entities/artists.entity';
-import { Playlist } from 'src/modules/playlists/entities/playlists.entity';
-import { Song } from 'src/modules/songs/entities/songs.entity';
-import { User } from 'src/modules/users/entities/users.entity';
 import { DataSource, DataSourceOptions } from 'typeorm';
 
 export const dataSourceOptions: DataSourceOptions = {
@@ -12,12 +8,13 @@ export const dataSourceOptions: DataSourceOptions = {
   password: process.env.PG_PASSWORD,
   port: +process.env.PG_PORT,
   database: process.env.PG_DB,
-  entities: [Song, User, Artist, Playlist],
-  synchronize: process.env.NODE_ENV === 'production' ? false : true,
+  entities: ['dist/**/*.entitiy.js'],
+  synchronize: false,
   ssl:
     process.env.NODE_ENV === 'production'
       ? { rejectUnauthorized: true }
       : false,
+  migrations: ['dist/db/migrations/*.js'],
 };
 
 const dataSource = new DataSource(dataSourceOptions);
