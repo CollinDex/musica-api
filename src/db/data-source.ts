@@ -8,7 +8,7 @@ export const dataSourceOptions: DataSourceOptions = {
   password: process.env.PG_PASSWORD,
   port: +process.env.PG_PORT,
   database: process.env.PG_DB,
-  entities: ['dist/**/*.entitiy.js'],
+  entities: ['dist/**/*.entity.js'],
   synchronize: false,
   ssl:
     process.env.NODE_ENV === 'production'
