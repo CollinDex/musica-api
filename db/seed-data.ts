@@ -7,9 +7,11 @@ import * as bcrypt from 'bcryptjs';
 import { Playlist } from 'src/modules/playlists/entities/playlists.entity';
 
 export const seedData = async (manager: EntityManager): Promise<void> => {
-  await seedUser();
-  await seedArtist();
-  await seedPlaylists();
+  for (let index = 0; index < 15; index++) {
+    await seedUser();
+    await seedArtist();
+    await seedPlaylists();
+  }
 
   async function seedUser() {
     const salt = await bcrypt.genSalt();
