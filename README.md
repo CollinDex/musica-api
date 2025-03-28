@@ -22,6 +22,7 @@ Musica API is the backend service for the Musica application, a music management
 - **Error handling & validation**
 - **Built-in database migrations**
 - **Optimized queries with TypeORM Query Builder**
+- **Data Seeding**
 
 ## Tech Stack
 - **NestJS** (Backend Framework)
