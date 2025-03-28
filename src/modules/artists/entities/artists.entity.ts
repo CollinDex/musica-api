@@ -20,3 +20,5 @@ export class Artist {
   @ManyToMany(() => Song, (song) => song.artists)
   songs: Song[];
 }
+
+//TODO: Update schema to acomodate artist name

@@ -11,6 +11,7 @@ import { PlaylistsModule } from './modules/playlists/playlists.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { JwtAuthGuard } from './common/guards/auth.guard';
 import { dataSourceOptions } from './db/data-source';
+import { SeedModule } from './modules/seed/seed.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { dataSourceOptions } from './db/data-source';
     PlaylistsModule,
     AuthModule,
     TypeOrmModule.forRoot(dataSourceOptions),
+    SeedModule,
   ],
   controllers: [AppController],
   providers: [
