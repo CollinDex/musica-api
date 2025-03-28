@@ -27,7 +27,7 @@ export const seedData = async (manager: EntityManager): Promise<void> => {
     user.apiKey = uuid4();
 
     await manager.getRepository(User).save(user);
-    console.log('✅ Users seeded successfully!');
+    console.info('✅ Users seeded successfully!');
   }
 
   async function seedArtist() {
@@ -46,7 +46,7 @@ export const seedData = async (manager: EntityManager): Promise<void> => {
 
     await manager.getRepository(User).save(user);
     await manager.getRepository(Artist).save(artist);
-    console.log('✅ Artist seeded successfully!');
+    console.info('✅ Artists seeded successfully!');
   }
 
   async function seedPlaylists() {
@@ -66,7 +66,7 @@ export const seedData = async (manager: EntityManager): Promise<void> => {
 
     await manager.getRepository(User).save(user);
     await manager.getRepository(Playlist).save(playlist);
-    console.log('✅ Playlist seeded successfully!');
+    console.info('✅ Playlists seeded successfully!');
   }
 
   async function seedSongs(manager: EntityManager) {
@@ -105,7 +105,6 @@ export const seedData = async (manager: EntityManager): Promise<void> => {
         artists,
         faker.number.int({ min: 1, max: 3 }),
       );
-      console.log(song.artists);
 
       // Assign a random playlist
       song.playlist = faker.helpers.arrayElement(playlists);
@@ -114,8 +113,6 @@ export const seedData = async (manager: EntityManager): Promise<void> => {
     }
 
     await songRepository.save(songs);
-    console.log('✅ Songs seeded successfully!');
+    console.info('✅ Songs seeded successfully!');
   }
 };
-
-//TODO: CREATE SEEDING FUNCTION FOR SONGS AND REFACTOR SEEDER TO CREATE MULTIPLE ENTITIES
