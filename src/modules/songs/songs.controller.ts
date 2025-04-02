@@ -85,7 +85,6 @@ export class SongsController {
     @Request() req: Request,
   ): Promise<Song> {
     try {
-      console.log(req);
       const results = this.songsService.create(CreateSongDTO);
       return results;
     } catch (error) {
