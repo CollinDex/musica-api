@@ -16,7 +16,9 @@ import { Enable2FAType } from 'src/common/types/auth-types';
 import { UpdateResult } from 'typeorm';
 import { ValidateTokenDTO } from './dto/validate-token.dto';
 import { AuthGuard } from '@nestjs/passport';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   constructor(
@@ -24,6 +26,19 @@ export class AuthController {
     private readonly authService: AuthService,
   ) {}
 
+  @ApiOperation({ summary: 'Register a new user' })
+  @ApiResponse({
+    status: 201,
+    description: 'It will return the user in the response',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Invalid Input',
+  })
+  @ApiResponse({
+    status: 500,
+    description: 'Internal Server Error',
+  })
   @Public()
   @Post('signup')
   signup(
@@ -33,6 +48,28 @@ export class AuthController {
     return this.userService.signUp(userDto);
   }
 
+  @ApiOperation({ summary: 'Logs a user in' })
+  @ApiResponse({
+    status: 200,
+    description:
+      'It will return an access token which can be used to access the users data',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Invalid Input',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'User not found',
+  })
+  @ApiResponse({
+    status: 500,
+    description: 'Internal Server Error',
+  })
   @Public()
   @Post('login')
   login(
@@ -42,6 +79,23 @@ export class AuthController {
     return this.authService.login(loginDto);
   }
 
+  @ApiOperation({ summary: 'Validate ApiKey' })
+  @ApiResponse({
+    status: 200,
+    description: 'It will return the users data',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Invalid Input',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Not found',
+  })
+  @ApiResponse({
+    status: 500,
+    description: 'Internal Server Error',
+  })
   @Public()
   @Get('validateApiKey')
   @UseGuards(AuthGuard('bearer'))
@@ -55,6 +109,27 @@ export class AuthController {
     };
   }
 
+  @ApiOperation({ summary: 'Enable 2fa' })
+  @ApiResponse({
+    status: 200,
+    description: 'Enables 2FA and Returns 2FA Secret Key',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Invalid Input',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'User not found',
+  })
+  @ApiResponse({
+    status: 500,
+    description: 'Internal Server Error',
+  })
   @Post('enable-2fa')
   enable2FA(
     @Request()
@@ -64,6 +139,23 @@ export class AuthController {
     return this.authService.enable2FA(req.user.userId);
   }
 
+  @ApiOperation({ summary: 'Disable 2fa' })
+  @ApiResponse({
+    status: 204,
+    description: 'Disabled 2fa',
+  })
+  @ApiResponse({
+    status: 401,
+    description: 'Unauthorized',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'User not found',
+  })
+  @ApiResponse({
+    status: 500,
+    description: 'Internal Server Error',
+  })
   @Post('disable-2fa')
   disable2FA(
     @Request()
@@ -73,6 +165,23 @@ export class AuthController {
     return this.authService.disable2FA(req.user.userId);
   }
 
+  @ApiOperation({ summary: 'Validate 2FA code' })
+  @ApiResponse({
+    status: 200,
+    description: 'It will return the users data',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Invalid Input',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Not found',
+  })
+  @ApiResponse({
+    status: 500,
+    description: 'Internal Server Error',
+  })
   @Post('validate-2fa')
   validate2FA(
     @Request()
