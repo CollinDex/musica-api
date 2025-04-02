@@ -10,7 +10,7 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   app.useGlobalInterceptors(new TransformInterceptor());
   const seedService = app.get(SeedService);
-  await seedService.seed();
-  await app.listen(3000);
+  //await seedService.seed();
+  await app.listen(process.env.PORT || 3000);
 }
 bootstrap();
