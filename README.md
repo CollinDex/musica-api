@@ -23,6 +23,7 @@ Musica API is the backend service for the Musica application, a music management
 - **Built-in database migrations**
 - **Optimized queries with TypeORM Query Builder**
 - **Data Seeding**
+- **Swagger Documentaion**
 
 ## Tech Stack
 - **NestJS** (Backend Framework)
@@ -70,12 +71,19 @@ JWT_SECRET=your-secret-key
 PORT=3000
 ```
 
-## API Endpoints
+## Documentation:
+Documentaion can be found at api/docs
+
+## API Endpoints(api/v1)
 ### **Authentication**
 | Method | Endpoint            | Description               |
 |--------|--------------------|---------------------------|
-| POST   | /auth/register     | Register a new user       |
+| POST   | /auth/signup     | Register a new user       |
 | POST   | /auth/login        | Authenticate user & get token |
+| POST   | /auth/validateApiKey | Validates user by apiKey |
+| POST   | /auth/enable-2fa     | Enables 2fa and returns a 2fa secret |
+| POST   | /auth/disable-2fa     | Disables 2fa |
+| POST   | /auth/ validate-2fa  | Validate users 2fa code |
 
 ### **Songs**
 | Method | Endpoint       | Description |
