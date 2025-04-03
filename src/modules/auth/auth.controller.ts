@@ -12,7 +12,7 @@ import { User } from '../users/entities/users.entity';
 import { LoginDTO } from './dto/login.dto';
 import { AuthService } from './auth.service';
 import { Public } from 'src/common/decorators/metadata.decorator';
-import { Enable2FAType } from 'src/common/types/auth-types';
+import { Enable2FAType, FASecret, LoginResponse } from 'src/common/types/auth-types';
 import { UpdateResult } from 'typeorm';
 import { ValidateTokenDTO } from './dto/validate-token.dto';
 import { AuthGuard } from '@nestjs/passport';
@@ -30,6 +30,7 @@ export class AuthController {
   @ApiResponse({
     status: 201,
     description: 'It will return the user in the response',
+    type: User,
   })
   @ApiResponse({
     status: 400,
@@ -53,6 +54,7 @@ export class AuthController {
     status: 200,
     description:
       'It will return an access token which can be used to access the users data',
+    type: LoginResponse,
   })
   @ApiResponse({
     status: 400,
@@ -83,6 +85,7 @@ export class AuthController {
   @ApiResponse({
     status: 200,
     description: 'It will return the users data',
+    type: User,
   })
   @ApiResponse({
     status: 400,
@@ -113,6 +116,7 @@ export class AuthController {
   @ApiResponse({
     status: 200,
     description: 'Enables 2FA and Returns 2FA Secret Key',
+    type: FASecret,
   })
   @ApiResponse({
     status: 400,
@@ -169,6 +173,7 @@ export class AuthController {
   @ApiResponse({
     status: 200,
     description: 'It will return the users data',
+    type: User,
   })
   @ApiResponse({
     status: 400,
