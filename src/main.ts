@@ -11,11 +11,16 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   app.useGlobalInterceptors(new TransformInterceptor());
 
+  app.setGlobalPrefix('api/v1', {
+    exclude: ['/', 'health', 'api', 'api/v1', 'api/docs', 'probe'],
+  });
+
   //Configure Swagger Module
   const config = new DocumentBuilder()
     .setTitle('Musica')
     .setDescription('Musica Api Documentation')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);
