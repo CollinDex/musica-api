@@ -71,7 +71,9 @@ export class PlaylistsService {
 
   async findAll(): Promise<Playlist[]> {
     try {
-      return await this.playlistRepository.find();
+      return await this.playlistRepository.find({
+        relations: ['songs', 'user'],
+      });
     } catch (error) {
       // Preserve known HTTP exceptions
       if (error instanceof HttpException) {
@@ -126,7 +128,15 @@ export class PlaylistsService {
 
     //Paginate using QueryBuilder
     const queryBuilder = this.playlistRepository.createQueryBuilder('playlist');
-    queryBuilder.orderBy('playlist.name', 'DESC');
+    queryBuilder
+      .leftJoinAndSelect('playlist.songs', 'song')
+      .orderBy('playlist.name', 'DESC');
     return paginate<Playlist>(queryBuilder, options);
   }
 }
+
+//TODO: Refactor createPlaylist to use id from jwt
+//TODO: Refactor createSong to use id from jwt
+//TODO: Refactor all services to use id from jwt
+//TODO: Refactor all paginate to user proper naming (eg: findAll) and comment out unused code
+//TODO: Refactor all other pagination to use proper naming
