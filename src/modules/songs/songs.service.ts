@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { In, Repository, UpdateResult } from 'typeorm';
+import { DeleteResult, In, Repository, UpdateResult } from 'typeorm';
 import {
   paginate,
   Pagination,
@@ -63,9 +63,9 @@ export class SongsService {
     }
   }
 
-  async delete(id: number): Promise<void> {
+  async delete(id: number): Promise<DeleteResult> {
     try {
-      await this.songRepository.delete(id);
+      return await this.songRepository.delete(id);
     } catch (error) {
       throw new Error('Error Deleting Content');
     }
