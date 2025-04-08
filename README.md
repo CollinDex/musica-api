@@ -9,7 +9,6 @@ Musica API is the backend service powering Musica — a music community and stre
 - [Installation](#installation)
 - [Environment Variables](#environment-variables)
 - [API Endpoints](#api-endpoints)
-- [Error Handling](#error-handling)
 - [License](#license)
 
 ## Summary
@@ -31,6 +30,7 @@ Musica API serves as the backbone for a feature-rich music platform that support
 - 🧪 **Built-in Migrations and Data Seeding**
 - 📚 **Swagger for API Documentation**
 - 🧼 **Global Error Handling and Validation**
+- 🧪 **Unit & Integration Tests for Core Modules (Auth, Users, Songs, etc.)**
 
 ## Tech Stack
 - **NestJS** (Backend Framework)
