@@ -1,36 +1,43 @@
 # Musica API
 
-Musica API is the backend service for the Musica application, a music management system that enables users to manage songs, artists, and playlists. Built using **NestJS** and **TypeORM**, it provides RESTful endpoints for handling music data efficiently.
+Musica API is the backend service powering Musica — a music community and streaming platform. Built with NestJS and TypeORM, this API enables users to upload, stream, and download songs, receive personalized music recommendations, and connect with other music lovers through real-time chat.
 
 ## Table of Contents
+- [Summary](#summary)
 - [Features](#features)
 - [Tech Stack](#tech-stack)
 - [Installation](#installation)
 - [Environment Variables](#environment-variables)
 - [API Endpoints](#api-endpoints)
-- [Database Schema](#database-schema)
 - [Error Handling](#error-handling)
 - [License](#license)
 
+## Summary
+Musica API serves as the backbone for a feature-rich music platform that supports:
+- Secure authentication with optional two-factor authentication
+- Role-based access and API key validation
+- Music library management including artists, songs, and playlists
+- RESTful APIs with robust validation and error handling
+- Seamless integration with a frontend music player interface
+
 ## Features
-- **User Authentication** (JWT-based login & registration)
-- **Advanced Security with Two Factor Authentication**
-- **Role Based Access for protected endpoints**
-- **API KEY generation**
-- **CRUD operations for Users, Songs, Artists, and Playlists**
-- **Pagination support for large datasets**
-- **Error handling & validation**
-- **Built-in database migrations**
-- **Optimized queries with TypeORM Query Builder**
-- **Data Seeding**
-- **Swagger Documentaion**
+- 🔐 **User Authentication** (JWT-based login & registration)
+- 🔒 **Two-Factor Authentication Support**
+- 👮 **Role-Based Access Control**
+- 🔑 **API Key Generation and Validation**
+- 🎵 **CRUD Operations** for Users, Songs, Artists, and Playlists
+- 📃 **Paginated Responses** for large datasets
+- 🧠 **Optimized Queries** with TypeORM Query Builder
+- 🧪 **Built-in Migrations and Data Seeding**
+- 📚 **Swagger for API Documentation**
+- 🧼 **Global Error Handling and Validation**
 
 ## Tech Stack
 - **NestJS** (Backend Framework)
 - **TypeORM** (ORM for database management)
-- **PostgreSQL** (Relational database support)
+- **PostgreSQL** (Relational database)
 - **JWT Authentication** (Secure API access)
-- **Docker** (For containerized deployment)
+- **Docker** (Containerized deployment)
 - **Swagger** (API Documentation)
 
 ## Installation
@@ -46,20 +53,20 @@ Musica API is the backend service for the Musica application, a music management
    npm install
    ```
 
-3. Set up the environment variables (See [Environment Variables](#environment-variables))
+3. Set up environment variables (see [Environment Variables](#environment-variables))
 
 4. Run database migrations:
    ```bash
    npm run migration:run
    ```
 
-5. Start the server:
+5. Start the development server:
    ```bash
    npm run start:dev
    ```
 
 ## Environment Variables
-Create a `.env` file in the project root and configure the following:
+Create a `.env` file in the project root with the following:
 ```env
 DATABASE_HOST=localhost
 DATABASE_PORT=5432
@@ -71,85 +78,47 @@ JWT_SECRET=your-secret-key
 PORT=3000
 ```
 
-## Documentation:
-Documentaion can be found at api/docs
+## Documentation
+The full Swagger documentation is available at: `/api/docs`
 
-## API Endpoints(api/v1)
-### **Authentication**
-| Method | Endpoint            | Description               |
-|--------|--------------------|---------------------------|
-| POST   | /auth/signup     | Register a new user       |
-| POST   | /auth/login        | Authenticate user & get token |
-| POST   | /auth/validateApiKey | Validates user by apiKey |
-| POST   | /auth/enable-2fa     | Enables 2fa and returns a 2fa secret |
-| POST   | /auth/disable-2fa     | Disables 2fa |
-| POST   | /auth/ validate-2fa  | Validate users 2fa code |
+## API Endpoints (api/v1)
+### 🔐 Authentication
+| Method | Endpoint                | Description                               |
+|--------|--------------------------|-------------------------------------------|
+| POST   | /auth/signup             | Register a new user                       |
+| POST   | /auth/login              | Authenticate and get JWT token            |
+| POST   | /auth/validateApiKey     | Validate a user's API key                 |
+| POST   | /auth/enable-2fa         | Enable 2FA and return a 2FA secret        |
+| POST   | /auth/disable-2fa        | Disable 2FA                               |
+| POST   | /auth/validate-2fa       | Validate user-provided 2FA code           |
 
-### **Songs**
-| Method | Endpoint       | Description |
-|--------|---------------|-------------|
-| GET    | /songs        | Fetch all songs |
-| GET    | /songs/:id    | Fetch a single song |
-| POST   | /songs        | Create a new song |
-| PATCH  | /songs/:id    | Update a song |
-| DELETE | /songs/:id    | Delete a song |
+### 🎵 Songs
+| Method | Endpoint       | Description         |
+|--------|----------------|---------------------|
+| GET    | /songs         | Fetch all songs     |
+| GET    | /songs/:id     | Fetch a single song |
+| POST   | /songs         | Create a new song   |
+| PATCH  | /songs/:id     | Update a song       |
+| DELETE | /songs/:id     | Delete a song       |
 
-### **Artists**
-| Method | Endpoint       | Description |
-|--------|---------------|-------------|
-| GET    | /artists      | Fetch all artists |
-| GET    | /artists/:id  | Fetch a single artist |
-| POST   | /artists      | Add a new artist |
-| PATCH  | /artists/:id  | Update an artist |
-| DELETE | /artists/:id  | Remove an artist |
+### 🎤 Artists
+| Method | Endpoint       | Description             |
+|--------|----------------|-------------------------|
+| GET    | /artists       | Fetch all artists       |
+| GET    | /artists/:id   | Fetch a single artist   |
+| POST   | /artists       | Add a new artist        |
+| PATCH  | /artists/:id   | Update an artist        |
+| DELETE | /artists/:id   | Delete an artist        |
 
-## Database Schema
-### **User Entity**
-```typescript
-@Entity('users')
-export class User {
-  @PrimaryGeneratedColumn() id: number;
-  @Column() firstName: string;
-  @Column() lastName: string;
-  @Column({ unique: true }) email: string;
-  @Column() password: string;
-}
-```
-
-### **Song Entity**
-```typescript
-@Entity('songs')
-export class Song {
-  @PrimaryGeneratedColumn() id: number;
-  @Column() title: string;
-  @ManyToMany(() => Artist, (artist) => artist.songs, { cascade: true })
-  @JoinTable({ name: 'songs_artists' })
-  artists: Artist[];
-  @Column({ type: 'date' }) releasedDate: Date;
-}
-```
-
-### **Artist Entity**
-```typescript
-@Entity('artists')
-export class Artist {
-  @PrimaryGeneratedColumn() id: number;
-  @Column() name: string;
-  @ManyToMany(() => Song, (song) => song.artists)
-  songs: Song[];
-}
-```
-
-## Error Handling
-Musica API uses NestJS's built-in `HttpException` for structured error responses. Example error response:
-```json
-{
-  "statusCode": 400,
-  "message": "Validation failed: title is required",
-  "error": "Bad Request"
-}
-```
+### 🎶 Playlists
+| Method | Endpoint         | Description              |
+|--------|------------------|--------------------------|
+| GET    | /playlists       | Get all playlists        |
+| GET    | /playlists/:id   | Get a specific playlist  |
+| POST   | /playlists       | Create a new playlist    |
+| PATCH  | /playlists/:id   | Update a playlist        |
+| DELETE | /playlists/:id   | Delete a playlist        |
 
 ## License
-This project is licensed under the MIT License. Feel free to modify and use it as needed.
+This project is licensed under the **MIT License**. You’re free to use, modify, and distribute it as needed.
 
