@@ -35,5 +35,5 @@ export class UpdateSongDto {
   @IsIn(['Yes', 'No'], {
     message: 'Fav must be Yes or No',
   })
-  readonly favorite?: 'Yes' | 'No';
+  readonly favorite?: string; //TODO: Update this to boolean
 }
