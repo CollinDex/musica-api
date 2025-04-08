@@ -3,7 +3,7 @@ import 'dotenv/config';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { TransformInterceptor } from './common/interceptors/transform.interceptor';
-import { SeedService } from './modules/seed/seed.service';
+//import { SeedService } from './modules/seed/seed.service';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
@@ -25,7 +25,7 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);
 
-  const seedService = app.get(SeedService);
+  //const seedService = app.get(SeedService);
   //await seedService.seed();
   await app.listen(process.env.PORT || 3000);
 }
