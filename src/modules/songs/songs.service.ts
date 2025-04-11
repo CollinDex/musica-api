@@ -71,24 +71,35 @@ export class SongsService {
     }
   }
 
-  async update(
-    id: number,
-    recordToUpdate: UpdateSongDto,
-  ): Promise<UpdateResult> {
+  async update(id: number, recordToUpdate: UpdateSongDto): Promise<Song> {
     try {
       const existingSong = await this.songRepository.findOne({
         where: { id: id },
+        relations: ['artists'],
       });
 
       if (!existingSong) {
-        throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+        throw new HttpException('Song not found', HttpStatus.NOT_FOUND);
       }
 
       if (Object.values(recordToUpdate).length === 0) {
         throw new HttpException('No supplied data', HttpStatus.BAD_REQUEST);
       }
 
-      return this.songRepository.update(id, recordToUpdate);
+      // Update regular fields
+      this.songRepository.merge(existingSong, recordToUpdate);
+
+      // If artists are included, update them manually
+      if (recordToUpdate.artists) {
+        const artists = await this.artistRepository.findBy({
+          id: In(recordToUpdate.artists),
+        });
+        existingSong.artists = artists;
+      }
+
+      //return this.songRepository.update(id, recordToUpdate); //Doesnt work for M:M relationshps
+
+      return this.songRepository.save(existingSong);
     } catch (error) {
       throw error;
     }

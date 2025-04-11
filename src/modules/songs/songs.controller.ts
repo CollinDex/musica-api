@@ -104,7 +104,7 @@ export class SongsController {
     id: number,
     @Body()
     updateSongDto: UpdateSongDto,
-  ): Promise<UpdateResult> {
+  ): Promise<Song> {
     try {
       return this.songsService.update(id, updateSongDto);
     } catch (error) {
