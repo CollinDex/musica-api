@@ -11,7 +11,7 @@ import { PlaylistsModule } from './modules/playlists/playlists.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { JwtAuthGuard } from './common/guards/auth.guard';
 import { dataSourceOptions } from './db/data-source';
-import { SeedModule } from './modules/seed/seed.module';
+//import { SeedModule } from './modules/seed/seed.module';
 import { ConfigModule } from '@nestjs/config';
 
 @Module({
@@ -23,7 +23,7 @@ import { ConfigModule } from '@nestjs/config';
     AuthModule,
     ConfigModule.forRoot({ envFilePath: ['.env'] }),
     TypeOrmModule.forRoot(dataSourceOptions),
-    SeedModule,
+    //SeedModule,
   ],
   controllers: [AppController],
   providers: [
