@@ -13,6 +13,7 @@ import { JwtAuthGuard } from './common/guards/auth.guard';
 import { dataSourceOptions } from './db/data-source';
 //import { SeedModule } from './modules/seed/seed.module';
 import { ConfigModule } from '@nestjs/config';
+import { EventsModule } from './modules/events/events.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { ConfigModule } from '@nestjs/config';
     AuthModule,
     ConfigModule.forRoot({ envFilePath: ['.env'] }),
     TypeOrmModule.forRoot(dataSourceOptions),
+    EventsModule,
     //SeedModule,
   ],
   controllers: [AppController],

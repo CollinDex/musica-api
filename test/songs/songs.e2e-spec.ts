@@ -9,7 +9,6 @@ import { Song } from 'src/modules/songs/entities/songs.entity';
 import { clearDatabase } from '../utils/clearDatabase';
 import { DataSource } from 'typeorm';
 import { UpdateSongDto } from 'src/modules/songs/dto/update-song-dto';
-import { r } from '@faker-js/faker/dist/airline-CBNP41sR';
 
 describe('Songs Module (e2e)', () => {
   let app: INestApplication;
